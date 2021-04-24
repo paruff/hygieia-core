@@ -2,7 +2,6 @@ package com.capitalone.dashboard.client;
 
 import com.capitalone.dashboard.util.Encryption;
 import com.capitalone.dashboard.util.EncryptionException;
-import com.capitalone.dashboard.util.Supplier;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -13,16 +12,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class RestClient {
     private final RestOperations restOperations;
 
     @Autowired
-    public RestClient(Supplier<RestOperations> restOperationsSupplier) {
+    public RestClient(RestOperationsSupplier restOperationsSupplier) {
         this.restOperations = restOperationsSupplier.get();
     }
 
@@ -46,17 +45,20 @@ public class RestClient {
 
         long start = System.currentTimeMillis();
         ResponseEntity<String> response;
-        HttpStatus status = null;
+        String status = null;
+        String status_phrase = null;
         try {
             response = restOperations.exchange(url, HttpMethod.POST, httpEntity, String.class);
-            status = response.getStatusCode();
+            status = response.getStatusCode().toString();
+            status_phrase = response.getStatusCode().getReasonPhrase();
         } catch (HttpStatusCodeException e) {
-            status = e.getStatusCode();
-            LOG.info("status=" + status + ", requestBody=" + httpEntity.getBody());
+            status = e.getStatusCode().toString();
+            status_phrase = e.getStatusCode().getReasonPhrase();
+            LOG.info("makeRestCall http_method=POST http_status=" + status + " http_status_phrase=" +status_phrase+" http_request_body=" + httpEntity.getBody());
             throw e;
         } finally {
             long end = System.currentTimeMillis();
-            LOG.info("makeRestCall op=POST url=" + url + ", status=" + status + " duration=" + (end - start));
+            LOG.info("makeRestCall http_method=POST http_url=" + url + " http_status=" + status + " http_status_phrase="+status_phrase+" http_duration=" + (end - start));
         }
 
         return response;
@@ -153,17 +155,20 @@ public class RestClient {
 
         long start = System.currentTimeMillis();
         ResponseEntity<String> response;
-        HttpStatus status = null;
+        String status = null;
         try {
             HttpEntity entity = headers==null?null:new HttpEntity(headers);
             response = restOperations.exchange(url, HttpMethod.GET, entity, String.class);
-            status = response.getStatusCode();
+            status = response.getStatusCode().toString();
         } catch (HttpStatusCodeException e) {
-            status = e.getStatusCode();
+            status = e.getStatusCode().toString();
+            throw e;
+        } catch (Exception e) {
+            status = e.getClass().getCanonicalName();
             throw e;
         } finally {
             long end = System.currentTimeMillis();
-            LOG.info("makeRestCall op=GET url=" + url + " status=" + status + " duration=" + (end - start));
+            LOG.info("makeRestCall http_method=GET http_url=" + url + " http_status=" + status + " http_duration=" + (end - start));
         }
         return response;
     }

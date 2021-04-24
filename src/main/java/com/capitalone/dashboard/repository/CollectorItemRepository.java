@@ -1,8 +1,8 @@
 package com.capitalone.dashboard.repository;
 
 import com.capitalone.dashboard.model.CollectorItem;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.types.path.PathBuilder;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.PathBuilder;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +53,15 @@ public interface CollectorItemRepository extends BaseCollectorItemRepository<Col
     List<CollectorItem> findByArtifactNameAndPath(String artifactName, String path);
 
     List<CollectorItem> findByDescription(String description);
+
+    @Query("{'options.orgName' : ?0, 'options.projectName' : ?1, 'options.projectToken' : ?2}")
+    CollectorItem findByOrgNameAndProjectNameAndProjectToken(String var1, String var2, String var3);
+
+    @Query("{'options.project' : ?0, 'options.team' : ?1}")
+    CollectorItem findByProjectAndTeam(String var1, String var2);
+
+    @Query("{'collectorId' : ?0, 'options.jobUrl' : ?1}")
+    CollectorItem findByJobUrl(ObjectId collectorId , String jobUrl);
 
     default Iterable<CollectorItem> findAllByOptionNameValue(String optionName, String optionValue) {
         PathBuilder<CollectorItem> path = new PathBuilder<>(CollectorItem.class, "collectorItem");

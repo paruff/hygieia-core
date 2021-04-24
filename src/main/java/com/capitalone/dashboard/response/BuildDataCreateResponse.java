@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.bson.types.ObjectId;
 
-public class BuildDataCreateResponse {
+public class BuildDataCreateResponse extends BaseResponse {
     private ObjectId id;
     private ObjectId collectorItemId;
     private ObjectId dashboardId;
@@ -120,7 +120,7 @@ public class BuildDataCreateResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof BuildDataCreateResponse)) return false;
 
         BuildDataCreateResponse that = (BuildDataCreateResponse) o;
 

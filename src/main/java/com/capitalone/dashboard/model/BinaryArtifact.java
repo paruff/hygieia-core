@@ -50,6 +50,8 @@ public class BinaryArtifact extends BaseModel {
     private String artifactClassifier;
     private String artifactExtension;
     private String type;
+    private String repo;
+    private String path;
     private long createdTimeStamp;
 
 
@@ -230,6 +232,22 @@ public class BinaryArtifact extends BaseModel {
         this.type = type;
     }
 
+    public String getRepo() {
+        return repo;
+    }
+
+    public void setRepo(String repo) {
+        this.repo = repo;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public long getCreatedTimeStamp() {
         return createdTimeStamp;
     }
@@ -325,7 +343,7 @@ public class BinaryArtifact extends BaseModel {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null || getClass() != obj.getClass())
+        if (obj == null || !(obj instanceof BinaryArtifact))
             return false;
 
         BinaryArtifact that = (BinaryArtifact) obj;

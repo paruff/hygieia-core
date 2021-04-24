@@ -26,6 +26,9 @@ public class LibraryPolicyResult extends BaseModel {
     private List<PolicyScanMetric> policyAlert = new ArrayList<>();
     private ObjectId buildId;
     private String scanState;
+    private String projectName;
+    private String productName;
+    private String buildUrl;
 
     public static class Threat {
         LibraryPolicyThreatLevel level;
@@ -198,6 +201,50 @@ public class LibraryPolicyResult extends BaseModel {
 
     }
 
+    public void addThreat(LibraryPolicyType type, LibraryPolicyThreatLevel level, LibraryPolicyThreatDisposition disposition, String dispositionStatus, String component,String age,String score, String policyName) {
+        Set<Threat> threatSet = threats.get(type);
+
+        if (CollectionUtils.isEmpty(threatSet)) {
+            Threat threat = new Threat(level, 1);
+            threat.getComponents().add(getComponentPlusDispositionPlusAgePlusPolicyName(component,disposition,dispositionStatus,age,score,policyName));
+            threat.addDispositionCount(disposition);
+            setCriticalAndHighVulAge(age, threat,disposition);
+            setCriticalAndHighVulScore(score,threat,disposition);
+            Set<Threat> set = new HashSet<>();
+            set.add(threat);
+            threats.put(type, set);
+        } else {
+            boolean found = false;
+            for (Threat t : threatSet) {
+                if (Objects.equals(t.getLevel(), level)) {
+                    t.setCount(t.getCount() + 1);
+                    t.addDispositionCount(disposition);
+                    setCriticalAndHighVulAge(age, t,disposition);
+                    setCriticalAndHighVulScore(score,t,disposition);
+                    if (!t.getComponents().contains(getComponentPlusDispositionPlusAgePlusPolicyName(component,disposition,dispositionStatus,age,score,policyName))) {
+                        t.getComponents().add(getComponentPlusDispositionPlusAgePlusPolicyName(component,disposition,dispositionStatus,age,score,policyName));
+                    }
+                    threatSet.add(t);
+                    threats.put(type, threatSet);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Threat t = new Threat(level, 1);
+                if (!t.getComponents().contains(getComponentPlusDispositionPlusAgePlusPolicyName(component,disposition,dispositionStatus,age,score,policyName))) {
+                    t.getComponents().add(getComponentPlusDispositionPlusAgePlusPolicyName(component,disposition,dispositionStatus,age,score,policyName));
+                }
+                t.addDispositionCount(disposition);
+                setCriticalAndHighVulAge(age, t,disposition);
+                setCriticalAndHighVulScore(score,t,disposition);
+                threatSet.add(t);
+                threats.put(type, threatSet);
+            }
+        }
+
+    }
+
     private void setCriticalAndHighVulAge(String age, Threat threat, LibraryPolicyThreatDisposition disposition) {
         if (disposition.equals(LibraryPolicyThreatDisposition.Open)) {
             int currentValue = NumberUtils.toInt(age);
@@ -256,14 +303,13 @@ public class LibraryPolicyResult extends BaseModel {
         this.policyAlert = policyAlert;
     }
 
-    private String getComponentPlusDisposition (String component, LibraryPolicyThreatDisposition disposition) {
-        return String.format("%s##%s", component, disposition.toString());
-    }
-
     private String getComponentPlusDispositionPlusAge (String component, LibraryPolicyThreatDisposition disposition, String dispositionStatus,String age, String score) {
         return String.format("%s##%s##%s##%s##%s", component, disposition.toString(), age, dispositionStatus,score);
     }
 
+    private String getComponentPlusDispositionPlusAgePlusPolicyName (String component, LibraryPolicyThreatDisposition disposition, String dispositionStatus,String age, String score, String policyName) {
+        return String.format("%s##%s##%s##%s##%s##%s", component, disposition.toString(), age, dispositionStatus,score,policyName);
+    }
 
     public ObjectId getBuildId() { return buildId; }
 
@@ -273,5 +319,27 @@ public class LibraryPolicyResult extends BaseModel {
 
     public String getScanState() { return this.scanState; }
 
+    public String getProjectName() {
+        return projectName;
+    }
 
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getBuildUrl() {
+        return buildUrl;
+    }
+
+    public void setBuildUrl(String buildUrl) {
+        this.buildUrl = buildUrl;
+    }
 }

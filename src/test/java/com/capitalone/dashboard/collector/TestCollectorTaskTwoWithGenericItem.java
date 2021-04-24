@@ -54,7 +54,5 @@ public class TestCollectorTaskTwoWithGenericItem extends CollectorTaskWithGeneri
     }
 
     @Override
-    public void collect(Collector collector) {
-
-    }
+    public void collect(Collector collector) { }
 }

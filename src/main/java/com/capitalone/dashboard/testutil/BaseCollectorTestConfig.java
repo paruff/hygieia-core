@@ -1,6 +1,6 @@
 package com.capitalone.dashboard.testutil;
 
-import com.capitalone.dashboard.collector.RestOperationsSupplier;
+import com.capitalone.dashboard.client.RestOperationsSupplier;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,7 +20,6 @@ public class BaseCollectorTestConfig {
         Map<String, TestResponse<String>> responseMap = new HashMap<>();
         return new TestRestOperations(responseMap);
     }
-
 
     @Bean
     public TaskScheduler taskScheduler() {

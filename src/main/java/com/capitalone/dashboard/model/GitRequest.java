@@ -40,6 +40,7 @@ public class GitRequest  {
     private String state;
     private long mergedAt;
     private String mergeAuthor;
+    private String mergeAuthorType;
     private String mergeAuthorLDAPDN;
     private long timestamp;
     private long resolutiontime;
@@ -52,6 +53,9 @@ public class GitRequest  {
     private String headSha;
     private String baseSha;
     private String requestType;
+    private long countFilesChanged;
+    private long lineDeletions;
+    private long lineAdditions;
     private List<Commit> commits;
 
 
@@ -336,6 +340,10 @@ public class GitRequest  {
         this.mergeAuthor = mergeAuthor;
     }
 
+    public String getMergeAuthorType() { return mergeAuthorType; }
+
+    public void setMergeAuthorType(String mergeAuthorType) { this.mergeAuthorType = mergeAuthorType; }
+
     public String getMergeAuthorLDAPDN() {
         return mergeAuthorLDAPDN;
     }
@@ -343,4 +351,29 @@ public class GitRequest  {
     public void setMergeAuthorLDAPDN(String mergeAuthorLDAPDN) {
         this.mergeAuthorLDAPDN = mergeAuthorLDAPDN;
     }
+
+    public long getCountFilesChanged() {
+        return countFilesChanged;
+    }
+
+    public void setCountFilesChanged(long countFilesChanged) {
+        this.countFilesChanged = countFilesChanged;
+    }
+
+    public long getLineDeletions() {
+        return lineDeletions;
+    }
+
+    public void setLineDeletions(long lineDeletions) {
+        this.lineDeletions = lineDeletions;
+    }
+
+    public long getLineAdditions() {
+        return lineAdditions;
+    }
+
+    public void setLineAdditions(long lineAdditions) {
+        this.lineAdditions = lineAdditions;
+    }
+
 }

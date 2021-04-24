@@ -2,19 +2,21 @@ package com.capitalone.dashboard.request;
 
 import javax.validation.constraints.NotNull;
 
-public class DeployDataCreateRequest {
+public class DeployDataCreateRequest extends BaseRequest {
     @NotNull
     private String executionId;
     @NotNull
     private String jobUrl;
     @NotNull
     private String appName;
+    private String appServiceName;
     @NotNull
     private String envName;
     @NotNull
     private String artifactName;
     @NotNull
     private String artifactVersion;
+    private String artifactPath;
     @NotNull
     private String jobName;
     @NotNull
@@ -31,7 +33,10 @@ public class DeployDataCreateRequest {
     private String startedBy;
     private String collectorName;
     private String niceName;
-
+    private String stageName;
+    private String stageStatus;
+    private String jobNumber;
+    private String buildUrl;
 
     public String getExecutionId() {
         return executionId;
@@ -168,4 +173,28 @@ public class DeployDataCreateRequest {
     public void setNiceName(String niceName) {
         this.niceName = niceName;
     }
+
+    public String getStageName() { return stageName; }
+
+    public void setStageName(String stageName) { this.stageName = stageName; }
+
+    public String getStageStatus() { return stageStatus; }
+
+    public void setStageStatus(String stageStatus) { this.stageStatus = stageStatus; }
+
+    public String getJobNumber() { return jobNumber; }
+
+    public void setJobNumber(String jobNumber) { this.jobNumber = jobNumber; }
+
+    public String getAppServiceName() { return appServiceName; }
+
+    public void setAppServiceName(String appServiceName) { this.appServiceName = appServiceName; }
+
+    public String getArtifactPath() { return artifactPath; }
+
+    public void setArtifactPath(String artifactPath) { this.artifactPath = artifactPath; }
+
+    public String getBuildUrl() { return buildUrl; }
+
+    public void setBuildUrl(String buildUrl) { this.buildUrl = buildUrl; }
 }

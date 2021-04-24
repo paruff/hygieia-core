@@ -1,9 +1,11 @@
 package com.capitalone.dashboard.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,10 @@ public class Collector extends BaseModel {
     private Map<String, Object> allFields = new HashMap<>();
 
     private long lastExecuted;
+    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE_TIME)
+    private java.util.Date lastExecutedTime;
+    private long lastExecutionRecordCount;
+    private long lastExecutedSeconds;
     private List<String> searchFields = Arrays.asList("description");
     private Map<String, Object> properties = new HashMap<>(); //general purpose name-value properties
 
@@ -71,7 +77,21 @@ public class Collector extends BaseModel {
     }
 
     public void setLastExecuted(long lastExecuted) {
+
         this.lastExecuted = lastExecuted;
+        this.setLastExecutedTime(new Date(lastExecuted));
+    }
+
+    public long getLastExecutionRecordCount() {
+        return lastExecutionRecordCount;
+    }
+
+    public long getLastExecutedSeconds() { return lastExecutedSeconds; }
+
+    public void setLastExecutedSeconds(long lastExecutedSeconds) { this.lastExecutedSeconds = lastExecutedSeconds; }
+
+    public void setLastExecutionRecordCount(long lastExecutionRecordCount) {
+        this.lastExecutionRecordCount = lastExecutionRecordCount;
     }
 
     public List<CollectionError> getErrors() {
@@ -113,4 +133,10 @@ public class Collector extends BaseModel {
     public void setProperties(Map<String, Object> properties) {
         this.properties = properties;
     }
+
+    public Date getLastExecutedTime() {
+        return lastExecutedTime == null ? new Date(System.currentTimeMillis()) : lastExecutedTime;
+    }
+
+    public void setLastExecutedTime(Date lastExecutedTime) { this.lastExecutedTime = lastExecutedTime; }
 }

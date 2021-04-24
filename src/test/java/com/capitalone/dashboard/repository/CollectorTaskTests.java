@@ -113,8 +113,6 @@ public class CollectorTaskTests {
         }
 
         @Override
-        public void collect(Collector collector) {
-
-        }
+        public void collect(Collector collector) { }
     }
 }

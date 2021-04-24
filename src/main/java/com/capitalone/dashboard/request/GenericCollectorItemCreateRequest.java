@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
  * A request to create a Generic Collector Item.
  *
  */
-public class GenericCollectorItemCreateRequest {
+public class GenericCollectorItemCreateRequest extends BaseRequest {
     private String buildId;
     @NotNull
     private String relatedCollectorItemId;
@@ -19,6 +19,7 @@ public class GenericCollectorItemCreateRequest {
 
     private String pattern;
 
+    private String buildUrl;
 
     public String getBuildId() {
         return buildId;
@@ -67,5 +68,7 @@ public class GenericCollectorItemCreateRequest {
         this.pattern = pattern;
     }
 
+    public String getBuildUrl() { return buildUrl; }
 
+    public void setBuildUrl(String buildUrl) { this.buildUrl = buildUrl; }
 }

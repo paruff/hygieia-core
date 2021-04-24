@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CloudSubnetCreateRequest {
+public class CloudSubnetCreateRequest extends BaseRequest {
     @NotNull
     private String subnetId;
     private String accountNumber;
@@ -158,7 +158,7 @@ public class CloudSubnetCreateRequest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof CloudSubnetCreateRequest)) return false;
 
         CloudSubnetCreateRequest that = (CloudSubnetCreateRequest) o;
 

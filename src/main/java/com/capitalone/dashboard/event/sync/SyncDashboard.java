@@ -222,7 +222,9 @@ public class SyncDashboard {
      */
     public void sync(Build build) {
 
-        /* Step 1: Add build collector item to Dashboard if built repo is in on the dashboard. */
+        // if feature flags for build and codequality are set to false, do not auto sync with dashboard.
+        FeatureFlag featureFlag = featureFlagRepository.findByName(FeatureFlagsEnum.auto_discover.toString());
+        if(!HygieiaUtils.allowSync(featureFlag, CollectorType.Build)) return;
 
         // Find the collectorItem of build
         CollectorItem buildCollectorItem = collectorItemRepository.findOne(build.getCollectorItemId());
@@ -241,7 +243,7 @@ public class SyncDashboard {
         //create a list of the repo collector items that are being built, most cases have only 1
         if (CollectionUtils.isEmpty(repos)) return;
         CollectionUtils.filter(repos, PredicateUtils.notNullPredicate());
-        repos.forEach((
+        repos.forEach(
                 repoBranch -> {
                     Map<String, Object> options = new HashMap<>();
                     options.put("url", repoBranch.getUrl());
@@ -250,7 +252,7 @@ public class SyncDashboard {
                     }
                     repoCollectorItemsInBuild.addAll(IterableUtils.toList(collectorItemRepository.findAllByOptionMapAndCollectorIdsIn(options, scmCollectorIds)));
 
-                }));
+                });
 
         repoCollectorItemsInBuild.forEach(rci->{
             rci.setEnabled(true);
@@ -268,6 +270,10 @@ public class SyncDashboard {
      * @param codeQuality
      */
     public void sync(CodeQuality codeQuality) {
+
+        // if feature flags for build and codequality are set to false, do not auto sync with dashboard.
+        FeatureFlag featureFlag = featureFlagRepository.findByName(FeatureFlagsEnum.auto_discover.toString());
+        if(!HygieiaUtils.allowSync(featureFlag, CollectorType.CodeQuality)) return;
         ObjectId buildId = codeQuality.getBuildId();
         if (buildId == null) return;
         Build build = buildRepository.findOne(buildId);

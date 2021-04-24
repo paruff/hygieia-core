@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CloudInstanceCreateRequest {
+public class CloudInstanceCreateRequest extends BaseRequest {
     @NotNull
     private String instanceId;
     @NotNull
@@ -285,7 +285,7 @@ public class CloudInstanceCreateRequest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof CloudInstanceCreateRequest)) return false;
 
         CloudInstanceCreateRequest that = (CloudInstanceCreateRequest) o;
 

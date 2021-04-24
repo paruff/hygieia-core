@@ -153,6 +153,6 @@ public class CollectorTaskTest {
         public String getCron() { return null; }
 
         @Override
-        public void collect(Collector collector) {}
+        public void collect(Collector collector) { }
     }
 }

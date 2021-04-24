@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CloudVolumeCreateRequest {
+public class CloudVolumeCreateRequest extends BaseRequest {
     @Indexed
     private String volumeId;
 
@@ -99,7 +99,7 @@ public class CloudVolumeCreateRequest {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof CloudVolumeCreateRequest)) return false;
 
         CloudVolumeCreateRequest that = (CloudVolumeCreateRequest) o;
 
